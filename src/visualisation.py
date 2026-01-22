@@ -26,22 +26,29 @@ def afficher_instance(points, titre="Instance TSPLIB"):
         coordonnees_x.append(point[1])
         coordonnees_y.append(point[2])
     
+    # Vérification qu'on a des points à afficher
+    if len(points) == 0:
+        print(f"Attention : aucun point trouvé")
+        return
+    
     # Création de la figure
     plt.figure(figsize=(10, 8))
     
-    # Affichage des points
-    plt.scatter(coordonnees_x, coordonnees_y, color='blue', s=50, zorder=3)
+    # Affichage des points (plus gros et plus visibles)
+    plt.scatter(coordonnees_x, coordonnees_y, color='blue', s=100, zorder=3, edgecolors='darkblue', linewidths=1)
     
-    # Affichage des numéros des points
-    for i in range(len(points)):
-        plt.annotate(
-            str(identifiants[i]),
-            (coordonnees_x[i], coordonnees_y[i]),
-            xytext=(5, 5),
-            textcoords='offset points',
-            fontsize=8,
-            color='black'
-        )
+    # Affichage des numéros des points (seulement pour les petites instances)
+    if len(points) <= 50:
+        for i in range(len(points)):
+            plt.annotate(
+                str(identifiants[i]),
+                (coordonnees_x[i], coordonnees_y[i]),
+                xytext=(5, 5),
+                textcoords='offset points',
+                fontsize=8,
+                color='black',
+                weight='bold'
+            )
     
     # Configuration des axes pour qu'ils soient lisibles
     plt.xlabel('Coordonnée X', fontsize=12)
@@ -49,7 +56,13 @@ def afficher_instance(points, titre="Instance TSPLIB"):
     plt.title(titre, fontsize=14)
     plt.grid(True, alpha=0.3)
     
-    # Ajustement automatique des limites pour voir tous les points
+    # Ajustement automatique des limites pour voir tous les points avec une marge
+    if len(coordonnees_x) > 0:
+        marge_x = (max(coordonnees_x) - min(coordonnees_x)) * 0.1
+        marge_y = (max(coordonnees_y) - min(coordonnees_y)) * 0.1
+        plt.xlim(min(coordonnees_x) - marge_x, max(coordonnees_x) + marge_x)
+        plt.ylim(min(coordonnees_y) - marge_y, max(coordonnees_y) + marge_y)
+    
     plt.tight_layout()
     
     # Affichage du graphique
@@ -81,19 +94,27 @@ def sauvegarder_instance(points, chemin_fichier, titre="Instance TSPLIB"):
     # Création de la figure
     plt.figure(figsize=(10, 8))
     
-    # Affichage des points
-    plt.scatter(coordonnees_x, coordonnees_y, color='blue', s=50, zorder=3)
+    # Vérification qu'on a des points à afficher
+    if len(points) == 0:
+        print(f"Attention : aucun point trouvé pour {chemin_fichier}")
+        plt.close()
+        return
     
-    # Affichage des numéros des points
-    for i in range(len(points)):
-        plt.annotate(
-            str(identifiants[i]),
-            (coordonnees_x[i], coordonnees_y[i]),
-            xytext=(5, 5),
-            textcoords='offset points',
-            fontsize=8,
-            color='black'
-        )
+    # Affichage des points (plus gros et plus visibles)
+    plt.scatter(coordonnees_x, coordonnees_y, color='blue', s=100, zorder=3, edgecolors='darkblue', linewidths=1)
+    
+    # Affichage des numéros des points (seulement pour les petites instances)
+    if len(points) <= 50:
+        for i in range(len(points)):
+            plt.annotate(
+                str(identifiants[i]),
+                (coordonnees_x[i], coordonnees_y[i]),
+                xytext=(5, 5),
+                textcoords='offset points',
+                fontsize=8,
+                color='black',
+                weight='bold'
+            )
     
     # Configuration des axes pour qu'ils soient lisibles
     plt.xlabel('Coordonnée X', fontsize=12)
@@ -101,7 +122,13 @@ def sauvegarder_instance(points, chemin_fichier, titre="Instance TSPLIB"):
     plt.title(titre, fontsize=14)
     plt.grid(True, alpha=0.3)
     
-    # Ajustement automatique des limites pour voir tous les points
+    # Ajustement automatique des limites pour voir tous les points avec une marge
+    if len(coordonnees_x) > 0:
+        marge_x = (max(coordonnees_x) - min(coordonnees_x)) * 0.1
+        marge_y = (max(coordonnees_y) - min(coordonnees_y)) * 0.1
+        plt.xlim(min(coordonnees_x) - marge_x, max(coordonnees_x) + marge_x)
+        plt.ylim(min(coordonnees_y) - marge_y, max(coordonnees_y) + marge_y)
+    
     plt.tight_layout()
     
     # Sauvegarde de la figure

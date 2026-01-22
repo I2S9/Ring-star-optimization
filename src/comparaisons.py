@@ -142,7 +142,7 @@ def comparer_methodes(chemin_fichier, p, alpha=0.5, tester_plne=True):
     return resultats
 
 
-def sauvegarder_resultats(resultats, chemin_fichier='results/resultats.txt'):
+def sauvegarder_resultats(resultats, chemin_fichier='resultats/resultats.txt'):
     """
     Sauvegarde les résultats dans un fichier texte.
     

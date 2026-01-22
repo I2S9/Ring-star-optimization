@@ -8,7 +8,7 @@
 PYTHON = python
 
 # Variable pour le fichier d'instance par défaut
-INSTANCE = tsplib-master/tsplib-master/att48.tsp
+INSTANCE = donnees/tsplib/att48.tsp
 
 # Nombre de stations par défaut
 P = 5
@@ -31,6 +31,12 @@ help:
 	@echo "  make clean       - Nettoie les fichiers générés"
 	@echo "  make test        - Lance un test rapide"
 	@echo ""
+	@echo "Pour utiliser une autre instance :"
+	@echo "  make run INSTANCE=donnees/tsplib/nom_instance.tsp P=5 ALPHA=0.5"
+	@echo ""
+	@echo "Pour lister toutes les instances disponibles :"
+	@echo "  python src/liste_instances.py"
+	@echo ""
 	@echo "Variables (modifiables) :"
 	@echo "  INSTANCE=$(INSTANCE)"
 	@echo "  P=$(P)"
@@ -47,7 +53,7 @@ install:
 
 # Règle run : lance le programme principal
 # Exécute les comparaisons expérimentales avec les paramètres par défaut
-# Les résultats sont sauvegardés dans results/resultats.txt
+# Les résultats sont sauvegardés dans resultats/resultats.txt
 .PHONY: run
 run:
 	@echo "Lancement des comparaisons expérimentales..."
@@ -57,12 +63,12 @@ run:
 	@echo ""
 	@if [ ! -f $(INSTANCE) ]; then \
 		echo "Erreur : le fichier $(INSTANCE) n'existe pas."; \
-		echo "Veuillez utiliser un fichier .tsp depuis tsplib-master/tsplib-master/"; \
+		echo "Veuillez utiliser un fichier .tsp depuis donnees/tsplib/"; \
 		exit 1; \
 	fi
 	$(PYTHON) src/main.py $(INSTANCE) $(P) $(ALPHA)
 	@echo ""
-	@echo "Résultats sauvegardés dans results/resultats.txt"
+	@echo "Résultats sauvegardés dans resultats/resultats.txt"
 
 # Règle test : lance un test rapide sur une petite instance
 # Utile pour vérifier que tout fonctionne correctement
@@ -75,12 +81,12 @@ test:
 
 # Règle figures : génère automatiquement les figures
 # Crée les visualisations des instances et des solutions
-# Les figures sont sauvegardées dans results/figures/
+# Les figures sont sauvegardées dans resultats/figures/
 .PHONY: figures
 figures:
 	@echo "Génération des figures..."
 	$(PYTHON) src/generer_figures.py
-	@echo "Figures générées dans results/figures/"
+	@echo "Figures générées dans resultats/figures/"
 
 # Règle clean : nettoie les fichiers générés
 # Supprime les résultats et les figures générées
@@ -88,12 +94,12 @@ figures:
 .PHONY: clean
 clean:
 	@echo "Nettoyage des fichiers générés..."
-	@if [ -f results/resultats.txt ]; then \
-		rm results/resultats.txt; \
-		echo "  - results/resultats.txt supprimé"; \
+	@if [ -f resultats/resultats.txt ]; then \
+		rm resultats/resultats.txt; \
+		echo "  - resultats/resultats.txt supprimé"; \
 	fi
-	@if [ -d results/figures ]; then \
-		rm -f results/figures/*.png results/figures/*.jpg; \
+	@if [ -d resultats/figures ]; then \
+		rm -f resultats/figures/*.png resultats/figures/*.jpg; \
 		echo "  - Figures supprimées"; \
 	fi
 	@echo "Nettoyage terminé."

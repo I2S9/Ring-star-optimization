@@ -13,11 +13,11 @@ def main():
         python src/main.py <fichier_tsp> <p> [alpha]
     
     Exemple :
-        python src/main.py tsplib-master/tsplib-master/att48.tsp 5 0.5
+        python src/main.py donnees/tsplib/att48.tsp 5 0.5
     """
     if len(sys.argv) < 3:
         print("Usage : python src/main.py <fichier_tsp> <p> [alpha]")
-        print("Exemple : python src/main.py tsplib-master/tsplib-master/att48.tsp 5 0.5")
+        print("Exemple : python src/main.py donnees/tsplib/att48.tsp 5 0.5")
         sys.exit(1)
     
     chemin_fichier = sys.argv[1]
@@ -43,7 +43,7 @@ def main():
         print(f"  {methode} : {comp['ecart_pourcentage']:.2f}% d'écart, "
               f"{comp['ratio_temps']:.2f}x plus lent")
     
-    print(f"\nRésultats sauvegardés dans results/resultats.txt")
+    print(f"\nRésultats sauvegardés dans resultats/resultats.txt")
 
 
 if __name__ == "__main__":

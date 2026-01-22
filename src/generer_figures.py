@@ -10,9 +10,10 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.lecture_tsp import lire_fichier_tsp
 from src.visualisation import sauvegarder_instance, sauvegarder_solution_complete
 from src.heuristiques.solution_initiale import construire_solution_initiale
+from src.liste_instances import lister_instances_par_taille
 
 
-def generer_figures_instance(chemin_fichier, dossier_sortie='results/figures'):
+def generer_figures_instance(chemin_fichier, dossier_sortie='resultats/figures'):
     """
     Génère la figure d'une instance TSPLIB.
     
@@ -38,7 +39,7 @@ def generer_figures_instance(chemin_fichier, dossier_sortie='results/figures'):
     print(f"Figure générée : {chemin_figure}")
 
 
-def generer_figures_solution(chemin_fichier, p, alpha=0.5, dossier_sortie='results/figures'):
+def generer_figures_solution(chemin_fichier, p, alpha=0.5, dossier_sortie='resultats/figures'):
     """
     Génère les figures d'une solution pour une instance.
     
@@ -74,35 +75,58 @@ def generer_figures_solution(chemin_fichier, p, alpha=0.5, dossier_sortie='resul
 
 def generer_toutes_figures():
     """
-    Génère toutes les figures pour les instances principales.
+    Génère toutes les figures pour les instances disponibles.
+    Utilise toutes les instances TSPLIB disponibles dans donnees/tsplib/.
     """
-    # Liste des instances à traiter
-    instances = [
-        'tsplib-master/tsplib-master/att48.tsp',
-        'tsplib-master/tsplib-master/berlin52.tsp',
-        'tsplib-master/tsplib-master/a280.tsp'
-    ]
+    # Récupération de toutes les instances disponibles
+    # On se limite aux petites et moyennes instances pour les figures
+    # (les grandes instances peuvent être trop lourdes à visualiser)
+    instances_petites = lister_instances_par_taille(taille_max=100)
     
-    # Paramètres de test
-    valeurs_p = [5, 7, 10]
-    valeurs_alpha = [0.3, 0.5, 0.7]
+    print(f"Génération des figures pour {len(instances_petites)} instances...")
+    print("(Instances avec n <= 100 points)\n")
     
     print("Génération des figures d'instances...")
-    for instance in instances:
+    for instance in instances_petites:
         if os.path.exists(instance):
-            generer_figures_instance(instance)
+            try:
+                # Vérification que l'instance a des coordonnées avant de générer la figure
+                from src.lecture_tsp import lire_fichier_tsp
+                points = lire_fichier_tsp(instance)
+                if len(points) > 0:
+                    generer_figures_instance(instance)
+                else:
+                    nom_instance = os.path.basename(instance)
+                    print(f"Instance {nom_instance} ignorée (pas de coordonnées, utilise une matrice de distances)")
+            except Exception as e:
+                print(f"Erreur pour {instance} : {e}")
         else:
             print(f"Instance non trouvée : {instance}")
     
     print("\nGénération des figures de solutions...")
-    for instance in instances:
+    # Pour les solutions, on génère pour plusieurs instances représentatives
+    # avec différentes tailles et différents paramètres
+    instances_representatives = [
+        'donnees/tsplib/burma14.tsp',      # Petite instance pour PLNE
+        'donnees/tsplib/ulysses16.tsp',    # Petite instance
+        'donnees/tsplib/att48.tsp',        # Instance moyenne (utilisée dans le rapport)
+        'donnees/tsplib/berlin52.tsp',    # Instance moyenne (utilisée dans le rapport)
+        'donnees/tsplib/eil51.tsp',        # Instance moyenne
+        'donnees/tsplib/st70.tsp',         # Instance moyenne-grande
+        'donnees/tsplib/a280.tsp'          # Grande instance (limite)
+    ]
+    
+    for instance in instances_representatives:
         if os.path.exists(instance):
-            # On génère quelques solutions représentatives
-            generer_figures_solution(instance, p=5, alpha=0.5)
-            if 'att48' in instance:
-                # Pour att48, on génère plusieurs variantes
-                generer_figures_solution(instance, p=7, alpha=0.5)
-                generer_figures_solution(instance, p=5, alpha=0.3)
+            try:
+                # Génération avec différents paramètres pour comparaison
+                generer_figures_solution(instance, p=5, alpha=0.5)
+                # Pour les petites instances, on génère aussi avec p=3
+                nom_instance = os.path.basename(instance).replace('.tsp', '')
+                if 'burma14' in nom_instance or 'ulysses16' in nom_instance:
+                    generer_figures_solution(instance, p=3, alpha=0.5)
+            except Exception as e:
+                print(f"Erreur pour {instance} : {e}")
     
     print("\nGénération terminée.")
 

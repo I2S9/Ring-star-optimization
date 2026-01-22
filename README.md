@@ -11,6 +11,33 @@ L'objectif est de minimiser :
 - La somme des distances d'affectation des points non stations
 - Éventuellement pondérée par un coefficient alpha
 
+## Instances disponibles
+
+Le projet utilise toutes les instances de la bibliothèque TSPLIB disponibles dans `donnees/tsplib/`. Il y a **111 instances** disponibles, de tailles variées :
+
+- **Petites instances** (n ≤ 50) : 14 instances, idéales pour les tests rapides et la PLNE
+- **Instances moyennes** (50 < n ≤ 200) : 35 instances, adaptées aux heuristiques et métaheuristiques
+- **Grandes instances** (n > 200) : 62 instances, pour tester la robustesse des méthodes
+
+Pour lister toutes les instances disponibles :
+
+```bash
+python src/liste_instances.py
+```
+
+Vous pouvez utiliser **n'importe quelle instance** avec le code. Par exemple :
+
+```bash
+# Petite instance pour test rapide
+python src/main.py donnees/tsplib/burma14.tsp 3 0.5
+
+# Instance moyenne
+python src/main.py donnees/tsplib/eil51.tsp 5 0.5
+
+# Grande instance
+python src/main.py donnees/tsplib/a280.tsp 10 0.5
+```
+
 ## Installation
 
 ### Prérequis
@@ -67,7 +94,7 @@ make help
 make run
 
 # Lancer avec des paramètres personnalisés
-make run INSTANCE=tsplib-master/tsplib-master/berlin52.tsp P=7 ALPHA=0.3
+make run INSTANCE=donnees/tsplib/berlin52.tsp P=7 ALPHA=0.3
 
 # Nettoyer les fichiers générés
 make clean
@@ -79,14 +106,39 @@ make clean
 # Lancer les comparaisons expérimentales
 python src/main.py <fichier_tsp> <nombre_stations> [alpha]
 
-# Exemple
-python src/main.py tsplib-master/tsplib-master/att48.tsp 5 0.5
+# Exemple avec une instance spécifique
+python src/main.py donnees/tsplib/att48.tsp 5 0.5
+
+# Vous pouvez utiliser n'importe quelle instance disponible dans donnees/tsplib/
+python src/main.py donnees/tsplib/berlin52.tsp 7 0.5
+python src/main.py donnees/tsplib/eil51.tsp 5 0.3
+```
+
+### Lister les instances disponibles
+
+Pour voir toutes les instances TSPLIB disponibles :
+
+```bash
+python src/liste_instances.py
+```
+
+Pour filtrer par taille :
+
+```bash
+# Petites instances (n <= 50)
+python src/liste_instances.py petites
+
+# Instances moyennes (50 < n <= 200)
+python src/liste_instances.py moyennes
+
+# Grandes instances (n > 200)
+python src/liste_instances.py grandes
 ```
 
 ### Paramètres
 
 - `<fichier_tsp>` : Chemin vers le fichier d'instance TSPLIB (format .tsp)
-  Les instances sont dans le répertoire `tsplib-master/tsplib-master/`
+  Les instances sont dans le répertoire `donnees/tsplib/`
 - `<nombre_stations>` : Nombre de stations à sélectionner (p)
 - `[alpha]` : Coefficient de pondération (optionnel, défaut : 0.5)
   - alpha = 0 : Minimise uniquement les affectations
@@ -95,7 +147,7 @@ python src/main.py tsplib-master/tsplib-master/att48.tsp 5 0.5
 
 ### Résultats
 
-Les résultats sont sauvegardés dans `results/resultats.txt` avec :
+Les résultats sont sauvegardés dans `resultats/resultats.txt` avec :
 - Tableaux comparatifs des méthodes
 - Détails par méthode (coût, temps, stations)
 - Analyses statistiques
@@ -105,19 +157,21 @@ Les résultats sont sauvegardés dans `results/resultats.txt` avec :
 ```
 ring-star-optimization/
 │
-├── tsplib-master/
-│   └── tsplib-master/        # Instances TSPLIB (.tsp)
+├── donnees/
+│   └── tsplib/              # Toutes les instances TSPLIB (111 fichiers .tsp)
 │       ├── att48.tsp
 │       ├── berlin52.tsp
 │       ├── a280.tsp
-│       └── ...
+│       └── ... (toutes les instances disponibles)
 │
 ├── src/
-│   ├── parser.py         # Lecture des fichiers TSPLIB
-│   ├── distances.py      # Calcul des distances euclidiennes
-│   ├── visualisation.py  # Visualisation des instances et solutions
-│   ├── main.py           # Point d'entrée principal
-│   ├── comparaisons.py  # Comparaisons expérimentales
+│   ├── lecture_tsp.py       # Lecture des fichiers TSPLIB
+│   ├── calcul_distances.py  # Calcul des distances euclidiennes
+│   ├── visualisation.py      # Visualisation des instances et solutions
+│   ├── liste_instances.py    # Utilitaire pour lister les instances disponibles
+│   ├── generer_figures.py    # Génération automatique des figures
+│   ├── main.py               # Point d'entrée principal
+│   ├── comparaisons.py        # Comparaisons expérimentales
 │   │
 │   ├── p_median/         # Méthodes pour le problème p-médian
 │   │   ├── heuristique_aleatoire.py
@@ -133,9 +187,10 @@ ring-star-optimization/
 │   │   └── metaheuristique.py
 │   │
 │   └── plne/             # Programmation linéaire en nombres entiers
-│       └── modele_compact.py
+│       ├── formulation_compacte.py
+│       └── formulation_non_compacte.py
 │
-├── results/
+├── resultats/
 │   ├── figures/          # Figures générées
 │   └── resultats.txt     # Résultats des expérimentations
 │
@@ -227,7 +282,7 @@ ring-star-optimization/
 
 ### Reproductibilité
 
-- Les résultats sont sauvegardés dans `results/resultats.txt`
+- Les résultats sont sauvegardés dans `resultats/resultats.txt`
 - Le Makefile garantit des commandes standardisées
 - Les paramètres par défaut sont documentés
 - Les graines aléatoires ne sont pas fixées (variabilité possible)
@@ -244,7 +299,7 @@ make install
 make run
 
 # Consulter les résultats
-cat results/resultats.txt
+cat resultats/resultats.txt
 ```
 
 ### Exemple 2 : Test rapide
@@ -254,7 +309,7 @@ cat results/resultats.txt
 make test
 
 # Lancer avec paramètres personnalisés
-python src/main.py tsplib-master/tsplib-master/att48.tsp 5 0.5
+python src/main.py donnees/tsplib/att48.tsp 5 0.5
 ```
 
 ### Exemple 3 : Visualisation
@@ -266,7 +321,7 @@ from src.heuristiques.solution_initiale import construire_solution_initiale
 from src.visualisation import afficher_solution_complete
 
 # Charger une instance
-points = lire_fichier_tsp('tsplib-master/tsplib-master/att48.tsp')
+points = lire_fichier_tsp('donnees/tsplib/att48.tsp')
 
 # Afficher l'instance brute
 afficher_instance(points, "Instance att48")

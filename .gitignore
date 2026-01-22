@@ -2,3 +2,18 @@
 # Ce fichier contient des instructions pour l'assistant IA
 # et ne doit pas être versionné dans le dépôt distant
 .cursorrules
+
+# Fichiers Python compilés
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Fichiers de résultats générés (peuvent être régénérés)
+resultats/resultats.txt
+resultats/figures/*.png
+resultats/figures/*.jpg
+
+# Fichiers temporaires
+*.tmp
+*.log
