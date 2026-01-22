@@ -1,7 +1,7 @@
 # Construction d'une solution initiale pour le problème anneau-étoile
 # Chaîne les méthodes p-médian et TSP pour produire une solution complète
 
-from src.distances import creer_matrice_distances
+from src.calcul_distances import creer_matrice_distances
 from src.p_median.heuristique_aleatoire import selectionner_stations_aleatoire
 from src.p_median.heuristique_gloutonne import selectionner_stations_grille
 from src.p_median.affectation import affecter_points_aux_stations, calculer_cout_affectation

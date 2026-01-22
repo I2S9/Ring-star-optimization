@@ -1,7 +1,7 @@
 # Algorithme du plus proche voisin pour le TSP
 # Construit un cycle hamiltonien en choisissant toujours le voisin le plus proche
 
-from src.distances import obtenir_distance
+from src.calcul_distances import obtenir_distance
 
 
 def construire_cycle_plus_proche_voisin(stations, distances):

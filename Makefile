@@ -8,7 +8,7 @@
 PYTHON = python
 
 # Variable pour le fichier d'instance par défaut
-INSTANCE = data/tsp/att48.tsp
+INSTANCE = tsplib-master/tsplib-master/att48.tsp
 
 # Nombre de stations par défaut
 P = 5
@@ -27,6 +27,7 @@ help:
 	@echo "Commandes disponibles :"
 	@echo "  make install    - Installe les dépendances Python"
 	@echo "  make run         - Lance une comparaison avec l'instance par défaut"
+	@echo "  make figures     - Génère les figures des instances et solutions"
 	@echo "  make clean       - Nettoie les fichiers générés"
 	@echo "  make test        - Lance un test rapide"
 	@echo ""
@@ -56,7 +57,7 @@ run:
 	@echo ""
 	@if [ ! -f $(INSTANCE) ]; then \
 		echo "Erreur : le fichier $(INSTANCE) n'existe pas."; \
-		echo "Veuillez placer un fichier .tsp dans data/tsp/"; \
+		echo "Veuillez utiliser un fichier .tsp depuis tsplib-master/tsplib-master/"; \
 		exit 1; \
 	fi
 	$(PYTHON) src/main.py $(INSTANCE) $(P) $(ALPHA)
@@ -71,6 +72,15 @@ test:
 	@echo "Vérification de l'installation..."
 	$(PYTHON) -c "import numpy, matplotlib, pulp; print('Dépendances OK')"
 	@echo "Test terminé."
+
+# Règle figures : génère automatiquement les figures
+# Crée les visualisations des instances et des solutions
+# Les figures sont sauvegardées dans results/figures/
+.PHONY: figures
+figures:
+	@echo "Génération des figures..."
+	$(PYTHON) src/generer_figures.py
+	@echo "Figures générées dans results/figures/"
 
 # Règle clean : nettoie les fichiers générés
 # Supprime les résultats et les figures générées

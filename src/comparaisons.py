@@ -2,11 +2,11 @@
 # Compare heuristiques, métaheuristiques et PLNE
 
 import time
-from src.parser import lire_fichier_tsp
-from src.distances import creer_matrice_distances
+from src.lecture_tsp import lire_fichier_tsp
+from src.calcul_distances import creer_matrice_distances
 from src.heuristiques.solution_initiale import construire_solution_initiale
 from src.heuristiques.metaheuristique import recuit_simule
-from src.plne.modele_compact import resoudre_plne
+from src.plne.formulation_compacte import resoudre_plne
 
 
 def comparer_methodes(chemin_fichier, p, alpha=0.5, tester_plne=True):

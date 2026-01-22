@@ -1,7 +1,7 @@
 # Algorithme 2-opt pour améliorer un cycle TSP
 # Recherche locale qui améliore un cycle en testant des échanges d'arêtes
 
-from src.distances import obtenir_distance
+from src.calcul_distances import obtenir_distance
 
 
 def appliquer_2opt(cycle, i, j):

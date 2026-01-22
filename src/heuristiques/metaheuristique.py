@@ -3,7 +3,7 @@
 
 import random
 import math
-from src.distances import creer_matrice_distances
+from src.calcul_distances import creer_matrice_distances
 from src.p_median.affectation import affecter_points_aux_stations, calculer_cout_affectation
 from src.tsp.plus_proche_voisin import construire_cycle_plus_proche_voisin, calculer_longueur_cycle
 from src.tsp.two_opt import ameliorer_cycle_2opt

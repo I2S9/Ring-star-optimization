@@ -67,7 +67,7 @@ make help
 make run
 
 # Lancer avec des paramètres personnalisés
-make run INSTANCE=data/tsp/autre.tsp P=7 ALPHA=0.3
+make run INSTANCE=tsplib-master/tsplib-master/berlin52.tsp P=7 ALPHA=0.3
 
 # Nettoyer les fichiers générés
 make clean
@@ -80,12 +80,13 @@ make clean
 python src/main.py <fichier_tsp> <nombre_stations> [alpha]
 
 # Exemple
-python src/main.py data/tsp/att48.tsp 5 0.5
+python src/main.py tsplib-master/tsplib-master/att48.tsp 5 0.5
 ```
 
 ### Paramètres
 
 - `<fichier_tsp>` : Chemin vers le fichier d'instance TSPLIB (format .tsp)
+  Les instances sont dans le répertoire `tsplib-master/tsplib-master/`
 - `<nombre_stations>` : Nombre de stations à sélectionner (p)
 - `[alpha]` : Coefficient de pondération (optionnel, défaut : 0.5)
   - alpha = 0 : Minimise uniquement les affectations
@@ -104,8 +105,12 @@ Les résultats sont sauvegardés dans `results/resultats.txt` avec :
 ```
 ring-star-optimization/
 │
-├── data/
-│   └── tsp/              # Instances TSPLIB (.tsp)
+├── tsplib-master/
+│   └── tsplib-master/        # Instances TSPLIB (.tsp)
+│       ├── att48.tsp
+│       ├── berlin52.tsp
+│       ├── a280.tsp
+│       └── ...
 │
 ├── src/
 │   ├── parser.py         # Lecture des fichiers TSPLIB
@@ -249,19 +254,19 @@ cat results/resultats.txt
 make test
 
 # Lancer avec paramètres personnalisés
-python src/main.py data/tsp/att48.tsp 5 0.5
+python src/main.py tsplib-master/tsplib-master/att48.tsp 5 0.5
 ```
 
 ### Exemple 3 : Visualisation
 
 ```python
-from src.parser import lire_fichier_tsp
+from src.lecture_tsp import lire_fichier_tsp
 from src.visualisation import afficher_instance
 from src.heuristiques.solution_initiale import construire_solution_initiale
 from src.visualisation import afficher_solution_complete
 
 # Charger une instance
-points = lire_fichier_tsp('data/tsp/att48.tsp')
+points = lire_fichier_tsp('tsplib-master/tsplib-master/att48.tsp')
 
 # Afficher l'instance brute
 afficher_instance(points, "Instance att48")

@@ -2,7 +2,7 @@
 # Utilise une grille pour répartir les stations de manière géographique
 
 import math
-from src.distances import distance_euclidienne
+from src.calcul_distances import distance_euclidienne
 
 
 def selectionner_stations_grille(points, p):

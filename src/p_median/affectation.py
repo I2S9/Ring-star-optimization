@@ -1,7 +1,7 @@
 # Affectation des points aux stations pour le problème p-médian
 # Chaque point non station est affecté à la station la plus proche
 
-from src.distances import creer_matrice_distances, obtenir_distance
+from src.calcul_distances import creer_matrice_distances, obtenir_distance
 
 
 def affecter_points_aux_stations(points, stations, distances):
